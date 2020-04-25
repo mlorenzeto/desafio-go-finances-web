@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface ContainerProps {
   size?: 'small' | 'large';
@@ -21,6 +21,7 @@ export const Container = styled.div<ContainerProps>`
         color: #fff;
         text-decoration: none;
         font-size: 16px;
+        opacity: 0.6;
         transition: opacity 0.2s;
 
         & + a {
@@ -28,7 +29,15 @@ export const Container = styled.div<ContainerProps>`
         }
 
         &:hover {
-          opacity: 0.6;
+          opacity: 1;
+          padding-bottom: 10px;
+          border-bottom: 2px solid #ff872c;
+        }
+
+        &.active {
+          opacity: 1;
+          padding-bottom: 10px;
+          border-bottom: 2px solid #ff872c;
         }
       }
     }

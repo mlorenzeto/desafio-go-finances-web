@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom';
 
 import filesize from 'filesize';
 
+import swal from 'sweetalert';
+
 import Header from '../../components/Header';
 import FileList from '../../components/FileList';
 import Upload from '../../components/Upload';
@@ -23,19 +25,35 @@ const Import: React.FC = () => {
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
+    if (uploadedFiles.length <= 0) {
+      swal('', 'Nenhum arquivo foi selecionado para importação!', 'warning');
 
-    // TODO
+      return;
+    }
 
     try {
-      // await api.post('/transactions/import', data);
+      uploadedFiles.forEach(async uploadedFile => {
+        const data = new FormData();
+
+        data.append('file', uploadedFile.file);
+        await api.post('/transactions/import', data);
+      });
+
+      swal('', 'Arquivo importado com sucesso!', 'success');
     } catch (err) {
-      // console.log(err.response.error);
+      console.log(err.response.error);
+      swal('', 'Erro ao importar o arquivo!', 'error');
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const formatedFiles: FileProps[] = files.map(file => ({
+      file,
+      name: file.name,
+      readableSize: filesize(file.size),
+    }));
+
+    setUploadedFiles([...uploadedFiles, ...formatedFiles]);
   }
 
   return (
